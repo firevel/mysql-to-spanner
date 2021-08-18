@@ -2,6 +2,14 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/firevel/mysql-to-spanner.svg?style=flat-square)](https://packagist.org/packages/firevel/mysql-to-spanner)
 
+## Migrating from MySQL to Cloud Spanner
+
+Start here: [Migrating from MySQL to Cloud Spanner](https://cloud.google.com/architecture/migrating-mysql-to-spanner).
+
+Make sure:
+- Columns got primary keys.
+- `AUTO_INCREMENT` can be ignored (not supported by Cloud Spanner).
+
 ## Installation
 
 You can install the package via composer:
@@ -25,8 +33,8 @@ php artisan db:spanner-dump
 
 ## Credits
 
-- [Mike Slowik][https://github.com/sl0wik]
-- [Miguel Costa][https://github.com/mgcostaParedes]
+- [Michael Slowik](https://github.com/sl0wik)
+- [Miguel Costa](https://github.com/mgcostaParedes)
 
 ## License
 
