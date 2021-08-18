@@ -1,6 +1,6 @@
 {
     "name": "firevel/mysql-to-spanner",
-    "description": "Laravel tool to export MySQL data to Cloud Spanner Data Definition Language (DDL)",
+    "description": "Laravel tool to convert MySQL schemas to Cloud Spanner Data Definition Language (DDL)",
     "keywords": [
         "firevel",
         "laravel",
