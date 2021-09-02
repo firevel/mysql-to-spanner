@@ -58,7 +58,11 @@ class SpannerDump extends Command
     {
         $tables = $this->getTables();
 
-        $lines = [];
+        $schemas = [
+            'tables' => [],
+            'indexes' => [],
+            'constraints' => [],
+        ];
 
         if (! empty($this->option('ignore-table'))) {
             $this->ignore = explode(',', $this->option('ignore-table'));
@@ -69,10 +73,29 @@ class SpannerDump extends Command
                 continue;
             }
             $this->info("Parsing $table");
-            $lines = array_merge($lines, $this->getTableDDL($table));
+            $ddl = $this->getTableDDL($table);
+
+            if (! empty($ddl['tables'])) {
+                $schemas['tables'] = array_merge($schemas['tables'], $ddl['tables']);
+            }
+
+            if (! empty($ddl['indexes'])) {
+                $schemas['indexes'] = array_merge($schemas['indexes'], $ddl['indexes']);
+            }
+
+            if (! empty($ddl['constraints'])) {
+                $schemas['constraints'] = array_merge($schemas['constraints'], $ddl['constraints']);
+            }
         }
 
-        $query = implode("\n", $lines);
+        $query = implode(
+            "\n",
+            array_merge(
+                $schemas['tables'],
+                $schemas['indexes'],
+                $schemas['constraints']
+            )
+        );
 
         if (empty($this->option('file'))) {
             echo $query;
