@@ -2,12 +2,12 @@
 
 namespace Firevel\MysqlToSpanner\Commands;
 
-use Storage;
 use DB;
-use Illuminate\Support\Str;
-use MgCosta\MysqlParser\Parser;
-use MgCosta\MysqlParser\Dialect;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
+use MgCosta\MysqlParser\Dialect;
+use MgCosta\MysqlParser\Parser;
+use Storage;
 
 class SpannerDump extends Command
 {
@@ -114,7 +114,7 @@ class SpannerDump extends Command
      * Check if table should be ignored.
      *
      * @param  string  $table
-     * @return boolean
+     * @return bool
      */
     public function isIgnored($table)
     {
@@ -123,7 +123,7 @@ class SpannerDump extends Command
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -140,6 +140,7 @@ class SpannerDump extends Command
         if (empty($disk)) {
             file_put_contents($file, $query);
             $this->info("Query saved to $file");
+
             return;
         }
 
@@ -198,6 +199,6 @@ class SpannerDump extends Command
     {
         $tables = DB::select('SHOW TABLES');
 
-        return array_map('current',$tables);        
+        return array_map('current', $tables);
     }
 }

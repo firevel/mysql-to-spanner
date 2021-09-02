@@ -18,5 +18,4 @@ class MysqlToSpannerServiceProvider extends ServiceProvider
             ]);
         }
     }
-
 }
