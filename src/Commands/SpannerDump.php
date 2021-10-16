@@ -16,7 +16,7 @@ class SpannerDump extends Command
      *
      * @var string
      */
-    protected $signature = 'db:spanner-dump {--disk=} {--file=} {--ignore-table=} {--default-primary-key=}';
+    protected $signature = 'db:spanner-dump {--disk=} {--file=} {--only=} {--ignore-table=} {--default-primary-key=}';
 
     /**
      * The console command description.
@@ -56,7 +56,11 @@ class SpannerDump extends Command
      */
     public function handle()
     {
-        $tables = $this->getTables();
+        if (! empty($this->option('only'))) {
+            $tables = explode(',', $this->option('only'));
+        } else {
+            $tables = $this->getTables();
+        }
 
         $schemas = [
             'tables' => [],
