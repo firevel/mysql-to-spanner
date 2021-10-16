@@ -189,7 +189,7 @@ class SpannerDump extends Command
 
         $keys = DB::select(
             DB::raw(
-                app(Dialect::class)->generateTableKeysDetails($tableName)
+                app(Dialect::class)->generateTableKeysDetails(DB::connection()->getDatabaseName(), $tableName)
             )
         );
 
