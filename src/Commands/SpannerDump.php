@@ -16,7 +16,7 @@ class SpannerDump extends Command
      *
      * @var string
      */
-    protected $signature = 'db:spanner-dump {--disk=} {--file=} {--ignore-table=}';
+    protected $signature = 'db:spanner-dump {--disk=} {--file=} {--ignore-table=} {--default-primary-key=}';
 
     /**
      * The console command description.
@@ -158,6 +158,13 @@ class SpannerDump extends Command
     {
         if (empty($this->parser)) {
             $this->parser = new Parser();
+
+            if (empty($this->option('default-primary-key'))) {
+                $this->parser->setShouldAssignPK(false);
+            } else {
+                $this->parser->setDefaultID($this->option('default-primary-key'));
+            }
+
         }
 
         return $this->parser;
