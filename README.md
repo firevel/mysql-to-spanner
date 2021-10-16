@@ -31,6 +31,7 @@ php artisan db:spanner-dump
 - Use `--disk` together with `--file` to save output in storage defined in `/config/filesystems.php`, ex.: `php artisan db:spanner-dump --disk=gcs --file=exports/spanner-ddl.txt`.
 - Use `--ignore-table` to specify tables to ignore during dump, ex: `php artisan db:spanner-dump --ignore-table=password_resets`, `php artisan db:spanner-dump --ignore-table=tmp_*`,  `php artisan db:spanner-dump --ignore-table=table1,table2`.
 - Use `--default-primary-key` to specify default primary key ex.: `php artisan db:spanner-dump --default-primary-key=id`.
+- Use `--only` to specify tables to export ex.: `php artisan db:spanner-dump --only=table1,table2`.
 
 ## Credits
 
