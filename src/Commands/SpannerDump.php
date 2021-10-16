@@ -164,7 +164,7 @@ class SpannerDump extends Command
             $this->parser = new Parser();
 
             if (empty($this->option('default-primary-key'))) {
-                $this->parser->setShouldAssignPK(false);
+                $this->parser->shouldAssignPrimaryKey(false);
             } else {
                 $this->parser->setDefaultID($this->option('default-primary-key'));
             }
