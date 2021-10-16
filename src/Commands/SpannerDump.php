@@ -130,9 +130,9 @@ class SpannerDump extends Command
     /**
      * Save output to file.
      *
-     * @param  string $query
-     * @param  string $file
-     * @param  string $disk
+     * @param  string  $query
+     * @param  string  $file
+     * @param  string  $disk
      * @return void
      */
     public function saveToFile($query, $file, $disk = null)
@@ -164,7 +164,6 @@ class SpannerDump extends Command
             } else {
                 $this->parser->setDefaultID($this->option('default-primary-key'));
             }
-
         }
 
         return $this->parser;
@@ -173,7 +172,7 @@ class SpannerDump extends Command
     /**
      * Get Spanner DDL.
      *
-     * @param  string $tableName
+     * @param  string  $tableName
      * @return string
      */
     public function getTableDDL($tableName)
