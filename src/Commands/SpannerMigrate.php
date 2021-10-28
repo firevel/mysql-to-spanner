@@ -59,7 +59,7 @@ class SpannerMigrate extends Command
             $this->ignore = explode(',', $this->option('ignore-table'));
         }
 
-        if ($this->option('schema')=='true') {
+        if ($this->option('schema') == 'true') {
             $schemas = [
                 'tables' => [],
                 'indexes' => [],
@@ -105,20 +105,19 @@ class SpannerMigrate extends Command
             }
         }
 
-
         return 0;
     }
 
     /**
      * Migrate data to spanner.
      *
-     * @param  string $connection Connection name
-     * @param  string $table      Table name
+     * @param  string  $connection  Connection name
+     * @param  string  $table  Table name
      * @return void
      */
     public function migrateData($connection, $table)
     {
-        $this->info('Migrating data from table ' . $table);
+        $this->info('Migrating data from table '.$table);
 
         DB::table($table)
             ->orderBy($this->getTablePrimaryKey($table))
@@ -131,26 +130,26 @@ class SpannerMigrate extends Command
     /**
      * Create database.
      *
-     * @param  string $connection
-     * @param  array $schemas
+     * @param  string  $connection
+     * @param  array  $schemas
      * @return void
      */
     public function createDatabase($connection, $schemas)
     {
         foreach ($schemas as &$schema) {
-            $schema = rtrim($schema, ";");
+            $schema = rtrim($schema, ';');
         }
 
         if (DB::connection($connection)->databaseExists()) {
             if (! $this->option('fresh')) {
-                throw new Exception("Database already exists. Use --fresh to overwrite exisitng database.");
+                throw new Exception('Database already exists. Use --fresh to overwrite exisitng database.');
             }
 
-            $this->info("Deleting database.");
+            $this->info('Deleting database.');
             DB::connection($connection)->dropDatabase();
         }
 
-        $this->info("Creating database.");
+        $this->info('Creating database.');
         $operation = DB::connection($connection)->createDatabase($schemas);
         $this->info('Database created.');
     }
@@ -234,7 +233,7 @@ class SpannerMigrate extends Command
     /**
      * Get table primary key.
      *
-     * @param  string $table      Table name
+     * @param  string  $table  Table name
      * @return void
      */
     public function getTablePrimaryKey($table)
@@ -246,8 +245,9 @@ class SpannerMigrate extends Command
                 return $this->option('default-primary-key');
             }
 
-            throw new Exception('Missing primary key in table ' . $table);
+            throw new Exception('Missing primary key in table '.$table);
         }
+
         return $key[0]->Column_name;
     }
 }
