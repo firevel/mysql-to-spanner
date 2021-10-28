@@ -101,6 +101,10 @@ class SpannerMigrate extends Command
 
         if ($this->option('data')) {
             foreach ($tables as $table) {
+                if ($this->isIgnored($table)) {
+                    continue;
+                }
+
                 $this->migrateData($connection, $table);
             }
         }
