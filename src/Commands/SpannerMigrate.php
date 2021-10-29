@@ -17,7 +17,7 @@ class SpannerMigrate extends Command
      *
      * @var string
      */
-    protected $signature = 'db:spanner-migrate {--spanner-connection=spanner} {--only=} {--ignore-table=} {--default-primary-key=} {--fresh} {--data} {--schema=true} {--chunk-size=100}';
+    protected $signature = 'db:spanner-migrate {--connection=} {--spanner-connection=spanner} {--only=} {--ignore-table=} {--default-primary-key=} {--fresh} {--data} {--schema=true} {--chunk-size=100}';
 
     /**
      * The console command description.
@@ -41,12 +41,21 @@ class SpannerMigrate extends Command
     protected $ignore = [];
 
     /**
+     * Connection name.
+     *
+     * @var Illuminate\Database\MySqlConnection
+     */
+    protected $connection;
+
+    /**
      * Execute the console command.
      *
      * @return int
      */
     public function handle()
     {
+        $this->connection = DB::connection($this->option('connection'));
+
         if (! empty($this->option('only'))) {
             $tables = explode(',', $this->option('only'));
         } else {
@@ -123,7 +132,7 @@ class SpannerMigrate extends Command
     {
         $this->info('Migrating data from table '.$table);
 
-        DB::table($table)
+        $this->connection->table($table)
             ->orderBy($this->getTablePrimaryKey($table))
             ->chunk($this->option('chunk-size'), function ($rows) use ($connection, $table) {
                 $rows = json_decode(json_encode($rows), true);
@@ -203,15 +212,15 @@ class SpannerMigrate extends Command
      */
     public function getTableDDL($tableName)
     {
-        $table = DB::select(
-            DB::raw(
+        $table = $this->connection->select(
+            $this->connection->raw(
                 app(Dialect::class)->generateTableDetails($tableName)
             )
         );
 
-        $keys = DB::select(
-            DB::raw(
-                app(Dialect::class)->generateTableKeysDetails(DB::connection()->getDatabaseName(), $tableName)
+        $keys = $this->connection->select(
+            $this->connection->raw(
+                app(Dialect::class)->generateTableKeysDetails($this->connection->getDatabaseName(), $tableName)
             )
         );
 
@@ -229,7 +238,7 @@ class SpannerMigrate extends Command
      */
     public function getTables()
     {
-        $tables = DB::select('SHOW TABLES');
+        $tables = $this->connection->select('SHOW TABLES');
 
         return array_map('current', $tables);
     }
@@ -242,7 +251,7 @@ class SpannerMigrate extends Command
      */
     public function getTablePrimaryKey($table)
     {
-        $key = DB::select("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
+        $key = $this->connection->select("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
 
         if (empty($key)) {
             if (! empty($this->option('default-primary-key'))) {

@@ -29,6 +29,7 @@ php artisan db:spanner-dump
 ```
 
 Parameters supported:
+- Use `--connection` to specify source (MySQL) connection name.
 - Use `--file` to specify output ex.: `php artisan db:spanner-dump --file=storage/spanner-ddl.txt`.
 - Use `--disk` together with `--file` to save output in storage defined in `/config/filesystems.php`, ex.: `php artisan db:spanner-dump --disk=gcs --file=exports/spanner-ddl.txt`.
 - Use `--ignore-table` to specify tables to ignore during dump, ex: `php artisan db:spanner-dump --ignore-table=password_resets`, `php artisan db:spanner-dump --ignore-table=tmp_*`,  `php artisan db:spanner-dump --ignore-table=table1,table2`.
@@ -50,6 +51,7 @@ php artisan db:spanner-migrate --data
 ```
 
 Parameters supported:
+- Use `--connection` to specify source (MySQL) connection name.
 - Use `--spanner-connection` to specify connection name (`spanner` by default).
 - Use `--fresh` to delete database before creating schemas.
 - Use `--data` to migrate rows.
