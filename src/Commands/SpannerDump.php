@@ -16,7 +16,7 @@ class SpannerDump extends Command
      *
      * @var string
      */
-    protected $signature = 'db:spanner-dump {--disk=} {--file=} {--only=} {--ignore-table=} {--default-primary-key=}';
+    protected $signature = 'db:spanner-dump {--connection=} {--disk=} {--file=} {--only=} {--ignore-table=} {--default-primary-key=}';
 
     /**
      * The console command description.
@@ -40,14 +40,11 @@ class SpannerDump extends Command
     protected $ignore = [];
 
     /**
-     * Create a new command instance.
+     * Connection name.
      *
-     * @return void
+     * @var Illuminate\Database\MySqlConnection
      */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $connection;
 
     /**
      * Execute the console command.
@@ -56,6 +53,8 @@ class SpannerDump extends Command
      */
     public function handle()
     {
+        $this->connection = DB::connection($this->option('connection'));
+
         if (! empty($this->option('only'))) {
             $tables = explode(',', $this->option('only'));
         } else {
@@ -181,15 +180,15 @@ class SpannerDump extends Command
      */
     public function getTableDDL($tableName)
     {
-        $table = DB::select(
-            DB::raw(
+        $table = $this->connection->select(
+            $this->connection->raw(
                 app(Dialect::class)->generateTableDetails($tableName)
             )
         );
 
-        $keys = DB::select(
-            DB::raw(
-                app(Dialect::class)->generateTableKeysDetails(DB::connection()->getDatabaseName(), $tableName)
+        $keys = $this->connection->select(
+            $this->connection->raw(
+                app(Dialect::class)->generateTableKeysDetails($this->connection->getDatabaseName(), $tableName)
             )
         );
 
@@ -207,7 +206,7 @@ class SpannerDump extends Command
      */
     public function getTables()
     {
-        $tables = DB::select('SHOW TABLES');
+        $tables = $this->connection->select('SHOW TABLES');
 
         return array_map('current', $tables);
     }
