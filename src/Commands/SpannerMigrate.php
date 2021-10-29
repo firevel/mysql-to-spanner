@@ -260,6 +260,7 @@ class SpannerMigrate extends Command
 
             throw new Exception('Missing primary key in table '.$table);
         }
+
         return $key[0]->Column_name;
     }
 }
