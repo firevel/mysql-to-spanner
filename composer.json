@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "^7.2|^8.0",
-        "colopl/laravel-spanner": "^3.9",
+        "colopl/laravel-spanner": "^3.8",
         "illuminate/contracts": "^7.0|^8.0",
         "illuminate/support": "^7.0|^8.0",
         "mgcosta/mysql-to-cloud-spanner": "^0.3.0",
