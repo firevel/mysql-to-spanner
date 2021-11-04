@@ -133,7 +133,7 @@ class SpannerMigrate extends Command
         $this->info('Migrating data from table '.$table);
 
         $this->connection->table($table)
-            ->orderBy($this->getTablePrimaryKey($table))
+            ->orderByRaw($this->getTablePrimaryKeys($table))
             ->chunk($this->option('chunk-size'), function ($rows) use ($connection, $table) {
                 $rows = json_decode(json_encode($rows), true);
                 DB::connection($connection)->table($table)->insert($rows);
@@ -244,16 +244,17 @@ class SpannerMigrate extends Command
     }
 
     /**
-     * Get table primary key.
+     * Get table primary keys.
      *
-     * @param  string  $table  Table name
-     * @return void
+     * @param $table
+     * @return mixed
+     * @throws Exception
      */
-    public function getTablePrimaryKey($table)
+    public function getTablePrimaryKeys($table)
     {
-        $key = $this->connection->select("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
+        $keys = $this->connection->select("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
 
-        if (empty($key)) {
+        if (empty($keys)) {
             if (! empty($this->option('default-primary-key'))) {
                 return $this->option('default-primary-key');
             }
@@ -261,6 +262,8 @@ class SpannerMigrate extends Command
             throw new Exception('Missing primary key in table '.$table);
         }
 
-        return $key[0]->Column_name;
+        $keys = json_decode(json_encode($keys), true);
+        $primaryKeys = array_column($keys,'Column_name');
+        return implode(',', $primaryKeys);
     }
 }
