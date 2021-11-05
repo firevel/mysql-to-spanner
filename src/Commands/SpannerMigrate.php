@@ -248,6 +248,7 @@ class SpannerMigrate extends Command
      *
      * @param $table
      * @return mixed
+     *
      * @throws Exception
      */
     public function getTablePrimaryKeys($table)
@@ -263,7 +264,8 @@ class SpannerMigrate extends Command
         }
 
         $keys = json_decode(json_encode($keys), true);
-        $primaryKeys = array_column($keys,'Column_name');
+        $primaryKeys = array_column($keys, 'Column_name');
+
         return implode(',', $primaryKeys);
     }
 }
