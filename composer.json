@@ -24,7 +24,7 @@
         "colopl/laravel-spanner": "^3.9.1",
         "illuminate/contracts": "^7.0|^8.0",
         "illuminate/support": "^7.0|^8.0",
-        "mgcosta/mysql-to-cloud-spanner": "^0.4.0",
+        "mgcosta/mysql-to-cloud-spanner": "^0.4.3",
         "ext-bcmath": "*"
     },
     "require-dev": {
